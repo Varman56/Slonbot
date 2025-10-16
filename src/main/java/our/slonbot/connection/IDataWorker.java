@@ -12,4 +12,6 @@ public interface IDataWorker {
     Food getFoodById(int id);
 
     void setWorkActivity(long playerId, int workId);
+
+    void updatePlayerExp(long id, int deltaExp);
 }
