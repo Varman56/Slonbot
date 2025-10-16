@@ -4,7 +4,9 @@ import our.slonbot.model.Food;
 import our.slonbot.model.Player;
 import our.slonbot.model.Work;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class InMemoryDataWorker implements IDataWorker {
@@ -23,14 +25,14 @@ public class InMemoryDataWorker implements IDataWorker {
         currentPlayer.id = CONSOLE_PLAYER_ID;
         currentPlayer.name = "ConsolePlayer";
 
-        Work work1 = new Work(1, "Поливать цветы", "", 5,  10, 3);
-        Work work2 = new Work(2, "Работать на заводе", "", 15,  30, 10);
+        Work work1 = new Work(0, "Поливать цветы", "", 5,  10, 3);
+        Work work2 = new Work(1, "Работать на заводе", "", 15,  30, 10);
 
         works.put(1, work1);
         works.put(2, work2);
 
-        Food food1 = new Food(1, "Трава", "", 1);
-        Food food2 = new Food(2, "Хлеб", "", 2);
+        Food food1 = new Food(0, "Трава", "", 1);
+        Food food2 = new Food(1, "Хлеб", "", 2);
 
         foods.put(1, food1);
         foods.put(2, food2);
@@ -63,6 +65,14 @@ public class InMemoryDataWorker implements IDataWorker {
         currentPlayer.exp += deltaExp;
     }
 
+    public List<Work> getAllWorks() {
+        return new ArrayList<>(works.values());
+    }
+
+    public List<Food> getAllFoods() {
+        return new ArrayList<>(foods.values());
+    }
+
     private void validatePlayerId(long playerId) {
         if (playerId != CONSOLE_PLAYER_ID) {
             throw new IllegalArgumentException("Неверный id игрока: " + playerId);
@@ -82,4 +92,7 @@ public class InMemoryDataWorker implements IDataWorker {
             throw new IllegalArgumentException("Неверный id еды");
         }
     }
+
+
+
 }

@@ -1,14 +1,18 @@
 package our.slonbot.presentation.controller;
 
 import our.slonbot.connection.IDataWorker;
+import our.slonbot.model.Food;
+import our.slonbot.model.Work;
 import our.slonbot.presentation.view.IView;
 import our.slonbot.reader.IReader;
 
+import java.util.List;
+
 public class Controller {
 
-    private IView view;
-    private IReader reader;
-    private IDataWorker database;
+    private final IView view;
+    private final IReader reader;
+    private final IDataWorker database;
 
     public Controller(IReader reader, IView view, IDataWorker database) {
         this.view = view;
@@ -18,33 +22,83 @@ public class Controller {
 
     public void start() {
         view.showWelcome();
-        mainCycle:
+
         while (true) {
-            view.showHelp();
-            switch (reader.readLine()) {
-                case "eat" -> onEatingRequest();
-                case "work" -> onWorkRequest();
+            String[] args = reader.readLine().split("");
+            if (args.length == 0) {
+                continue;
+            }
+            switch (args[0]) {
+                case "eat" -> {
+                    switch (args.length) {
+                        case 1 -> view.showFood(database.getAllFoods());
+                        case 2 -> onEatingRequest(args[1]);
+                        default -> onUnknownCommand();
+                    }
+                }
+                case "work" -> {
+                    switch (args.length) {
+                        case 1 -> view.showWork(database.getAllWorks());
+                        case 2 -> onWorkRequest(args[1]);
+                        default -> onUnknownCommand();
+                    }
+                }
                 case "stat" -> onStatRequest();
                 case "help" -> view.showHelp();
-                default -> {
-                    break mainCycle;
-                }
+                default -> onUnknownCommand();
             }
         }
-        reader.close();
     }
 
-    void onEatingRequest(){
-
+    private static boolean isPositiveInteger(String str) {
+        return str != null && str.matches("\\d+");
     }
 
-    void onWorkRequest(){
+    private void onUnknownCommand() {
+        view.showAdditional("Я тебя непонимат :--(");
+    }
+
+    private void onUnknownId() {
+        view.showAdditional("Id неверный");
+    }
+
+    private int checkListId(String id, int type) {
+        if (!isPositiveInteger(id)) {
+            onUnknownCommand();
+            return -1;
+        }
+        int digitId = Integer.parseInt(id);
+        int listSize;
+        switch (type) {
+            case 0 -> listSize = database.getAllFoods().size();
+            case 1 -> listSize = database.getAllWorks().size();
+            default -> {
+                return -1;
+            }
+        }
+        return listSize - 1 - digitId;
+    }
+
+    void onEatingRequest(String foodId) {
+        int id = checkListId(foodId, 0);
+        if (id < 0) {
+            onUnknownId();
+            return;
+        }
+        List<Food> foods = database.getAllFoods();
+    }
+
+    void onWorkRequest(String WorkId) {
+        int id = checkListId(WorkId, 1);
+        if (id < 0) {
+            onUnknownId();
+            return;
+        }
+        List<Work> works = database.getAllWorks();
 
     }
 
     void onStatRequest() {
-
+        view.showStat(database.getPlayerById(0));
     }
-
-
 }
