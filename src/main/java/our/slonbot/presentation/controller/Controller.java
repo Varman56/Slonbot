@@ -22,7 +22,7 @@ public class Controller {
         while (true) {
             view.showHelp();
             switch (reader.readLine()) {
-//                case "eat" -> onEatingRequest();
+                case "eat" -> onEatingRequest();
                 case "work" -> onWorkRequest();
                 case "stat" -> onStatRequest();
                 case "help" -> view.showHelp();
@@ -31,6 +31,20 @@ public class Controller {
                 }
             }
         }
+        reader.close();
     }
+
+    void onEatingRequest(){
+
+    }
+
+    void onWorkRequest(){
+
+    }
+
+    void onStatRequest() {
+
+    }
+
 
 }

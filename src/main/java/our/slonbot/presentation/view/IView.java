@@ -1,11 +1,17 @@
 package our.slonbot.presentation.view;
 
+import our.slonbot.model.Food;
+import our.slonbot.model.Player;
+import our.slonbot.model.Work;
+
+import java.util.List;
+
 public interface IView {
     void showWelcome();
     void showHelp();
-    void showStat();
-    void showFood();
-    void showWork();
+    void showStat(Player player);
+    void showFood(List<Food> foodList);
+    void showWork(List<Work> workList);
     void showAdditional(String s);
     // TODO: Slonyara functionality
 }
