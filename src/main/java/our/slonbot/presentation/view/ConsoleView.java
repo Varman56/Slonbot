@@ -8,19 +8,55 @@ import java.util.List;
 
 public class ConsoleView implements IView {
     public void showWelcome() {
-        System.out.println("");
+        System.out.println("Привет! Это слон бот! Напиши help чтобы узнать что ты можешь!");
     }
     public void showHelp() {
-        System.out.println("");
+        System.out.println("""
+                help - выводит помощь
+                мой слон - показывает вашего слона
+                еда - показывает доступную еду
+                еда <id еды> - кормит определенной едой
+                работа - показывает доступную работу
+                работа <id работы> - отправляет слона на работу
+                """);
     }
     public void showStat(Player player) {
-        System.out.println("");
+        String formattedString = String.format("""
+                Имя слона: %s 
+                Возраст: %d
+                Опыт: %d
+                Денег: %d
+                """, player.name, player.level, player.exp, player.money);
+        System.out.println(formattedString);
     }
     public void showFood(List<Food> foodList) {
-        System.out.println("");
+        System.out.println("Доступная еда");
+        System.out.println("----------------");
+        for (Food food : foodList) {
+            String formattedString = String.format("""
+                %s
+                
+                %s
+                дает опыта
+                %d
+                ----------------
+                """, food.title(), food.description(), food.exp());
+        }
     }
     public void showWork(List<Work> workList) {
-        System.out.println("");
+        System.out.println("Доступная работа");
+        System.out.println("----------------");
+        for (Work work : workList) {
+            String formattedString = String.format("""
+                %s
+                
+                %s
+                дает опыта
+                %d
+                
+                ----------------
+                """, work.title(), work.description(), work.exp());
+        }
     }
     public void showAdditional(String s){
         System.out.println(s);
