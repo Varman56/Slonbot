@@ -5,8 +5,8 @@ import java.util.Scanner;
 public class ScannerReader implements IReader {
     private final Scanner scanner;
 
-    public ScannerReader(Scanner scanner) {
-        this.scanner = scanner;
+    public ScannerReader() {
+        this.scanner = new Scanner(System.in);
     }
 
     public String readLine() {
