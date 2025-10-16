@@ -15,7 +15,9 @@ public interface IDataWorker {
 
     void setWorkActivity(long playerId, int workId);
 
-    void updatePlayerExp(long id, int deltaExp);
+    void updatePlayerExp(long id, long deltaExp);
+
+    void updatePlayerMoney(long id, int deltaMoney);
 
     List<Food> getAllFoods();
 

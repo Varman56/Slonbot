@@ -24,9 +24,10 @@ public class InMemoryDataWorker implements IDataWorker {
         currentPlayer = new Player();
         currentPlayer.id = CONSOLE_PLAYER_ID;
         currentPlayer.name = "ConsolePlayer";
+        currentPlayer.level = 1;
 
-        Work work1 = new Work(0, "Поливать цветы", "", 5,  10, 3);
-        Work work2 = new Work(1, "Работать на заводе", "", 15,  30, 10);
+        Work work1 = new Work(0, "Поливать цветы", "", 5, 10, 3);
+        Work work2 = new Work(1, "Работать на заводе", "", 15, 30, 10);
 
         works.put(1, work1);
         works.put(2, work2);
@@ -60,9 +61,14 @@ public class InMemoryDataWorker implements IDataWorker {
         validateWorkId(workId);
     }
 
-    public void updatePlayerExp(long id, int deltaExp) {
+    public void updatePlayerExp(long id, long deltaExp) {
         validatePlayerId(id);
         currentPlayer.exp += deltaExp;
+    }
+
+    public void updatePlayerMoney(long id, int deltaMoney) {
+        validatePlayerId(id);
+        currentPlayer.money += deltaMoney;
     }
 
     public List<Work> getAllWorks() {
@@ -88,11 +94,10 @@ public class InMemoryDataWorker implements IDataWorker {
 
     private void validateFoodId(int FoodId) {
         Food food = foods.get(FoodId);
-        if (food == null)  {
+        if (food == null) {
             throw new IllegalArgumentException("Неверный id еды");
         }
     }
-
 
 
 }

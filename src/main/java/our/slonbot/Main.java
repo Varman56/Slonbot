@@ -14,5 +14,7 @@ public class Main {
         IView view = new ConsoleView();
         IDataWorker dataWorker = new InMemoryDataWorker();
         Controller controller = new Controller(reader, view, dataWorker);
+
+        controller.start();
     }
 }

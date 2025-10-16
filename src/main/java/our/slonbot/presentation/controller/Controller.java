@@ -6,7 +6,7 @@ import our.slonbot.model.Work;
 import our.slonbot.presentation.view.IView;
 import our.slonbot.reader.IReader;
 
-import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class Controller {
 
@@ -85,7 +85,10 @@ public class Controller {
             onUnknownId();
             return;
         }
-        List<Food> foods = database.getAllFoods();
+        Food food = database.getFoodById(id);
+        view.showAdditional("Мммм " + food.title() + ". Обожаю!");
+
+        database.updatePlayerExp(0, food.exp());
     }
 
     void onWorkRequest(String WorkId) {
@@ -94,8 +97,17 @@ public class Controller {
             onUnknownId();
             return;
         }
-        List<Work> works = database.getAllWorks();
+        Work work = database.getWorkById(id);
+        view.showAdditional("Пора вкалывать...");
+        try {
+            TimeUnit.SECONDS.sleep(work.time());
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+        view.showAdditional("А вот и ЗП капнула!");
 
+        database.updatePlayerExp(0, work.exp());
+        database.updatePlayerMoney(0, work.money());
     }
 
     void onStatRequest() {
