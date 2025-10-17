@@ -5,16 +5,14 @@ import our.slonbot.model.Player;
 import our.slonbot.model.Work;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class InMemoryDataWorker implements IDataWorker {
     private static final long CONSOLE_PLAYER_ID = 0L;
 
     private Player currentPlayer;
-    private final Map<Integer, Work> works = new HashMap<>();
-    private final Map<Integer, Food> foods = new HashMap<>();
+    private final List<Work> works = new ArrayList<>();
+    private final List<Food> foods = new ArrayList<>();
 
     public InMemoryDataWorker() {
         initializeDefaultData();
@@ -26,17 +24,17 @@ public class InMemoryDataWorker implements IDataWorker {
         currentPlayer.name = "ConsolePlayer";
         currentPlayer.level = 1;
 
-        Work work1 = new Work(0, "Поливать цветы", "", 5, 10, 3);
-        Work work2 = new Work(1, "Работать на заводе", "", 15, 30, 10);
+        Work work0 = new Work(1, "Поливать цветы", "Зачем-то же хобот растёт, правда?", 5, 10, 3);
+        Work work1 = new Work(0, "Работать на заводе", "Мой дед работал на заводе, мой батя работал на заводе", 15, 30, 10);
 
-        works.put(0, work1);
-        works.put(1, work2);
+        works.add(work0);
+        works.add(work1);
 
-        Food food1 = new Food(0, "Трава", "", 1);
-        Food food2 = new Food(1, "Хлеб", "", 2);
+        Food food0 = new Food(1, "Трава", "Зелененькая африканская (легальная)", 1);
+        Food food1 = new Food(0, "Хлеб", "Отобранный у туристов особенно вкусный", 2);
 
-        foods.put(0, food1);
-        foods.put(1, food2);
+        foods.add(food0);
+        foods.add(food1);
     }
 
     public Player getPlayerById(long id) {
@@ -45,15 +43,13 @@ public class InMemoryDataWorker implements IDataWorker {
     }
 
     public Work getWorkById(int id) {
-        Work work = works.get(id);
         validateWorkId(id);
-        return work;
+        return works.get(id);
     }
 
     public Food getFoodById(int id) {
-        Food food = foods.get(id);
         validateFoodId(id);
-        return food;
+        return foods.get(id);
     }
 
     public void setWorkActivity(long playerId, int workId) {
@@ -72,11 +68,11 @@ public class InMemoryDataWorker implements IDataWorker {
     }
 
     public List<Work> getAllWorks() {
-        return new ArrayList<>(works.values());
+        return works;
     }
 
     public List<Food> getAllFoods() {
-        return new ArrayList<>(foods.values());
+        return foods;
     }
 
     private void validatePlayerId(long playerId) {
@@ -86,15 +82,13 @@ public class InMemoryDataWorker implements IDataWorker {
     }
 
     private void validateWorkId(int workId) {
-        Work work = works.get(workId);
-        if (work == null) {
+        if (workId < 0 || workId >= works.size()) {
             throw new IllegalArgumentException("Неверный id работы");
         }
     }
 
     private void validateFoodId(int FoodId) {
-        Food food = foods.get(FoodId);
-        if (food == null) {
+        if (FoodId < 0 || FoodId >= foods.size()) {
             throw new IllegalArgumentException("Неверный id еды");
         }
     }

@@ -34,13 +34,13 @@ public class ConsoleView implements IView {
         System.out.println("----------------");
         for (Food food : foodList) {
             String formattedString = String.format("""
-                %s
+                %s - %d
                 
                 %s
                 дает опыта
                 %d
                 ----------------
-                """, food.title(), food.description(), food.exp());
+                """, food.title(), food.id(), food.description(), food.exp());
             System.out.println(formattedString);
         }
     }
@@ -49,14 +49,15 @@ public class ConsoleView implements IView {
         System.out.println("----------------");
         for (Work work : workList) {
             String formattedString = String.format("""
-                %s
+                %s - %d
                 
                 %s
                 дает опыта
                 %d
-                
+                дает денег
+                %d
                 ----------------
-                """, work.title(), work.description(), work.exp());
+                """, work.title(), work.id(), work.description(), work.exp(), work.money());
             System.out.println(formattedString);
         }
     }
