@@ -24,14 +24,14 @@ public class InMemoryDataWorker implements IDataWorker {
         currentPlayer.name = "ConsolePlayer";
         currentPlayer.level = 1;
 
-        Work work0 = new Work(1, "Поливать цветы", "Зачем-то же хобот растёт, правда?", 5, 10, 3);
-        Work work1 = new Work(0, "Работать на заводе", "Мой дед работал на заводе, мой батя работал на заводе", 15, 30, 10);
+        Work work0 = new Work(0, "Поливать цветы", "Зачем-то же хобот растёт, правда?", 5, 10, 3);
+        Work work1 = new Work(1, "Работать на заводе", "Мой дед работал на заводе, мой батя работал на заводе", 15, 30, 10);
 
         works.add(work0);
         works.add(work1);
 
-        Food food0 = new Food(1, "Трава", "Зелененькая африканская (легальная)", 1);
-        Food food1 = new Food(0, "Хлеб", "Отобранный у туристов особенно вкусный", 2);
+        Food food0 = new Food(0, "Трава", "Зелененькая африканская (легальная)", 1);
+        Food food1 = new Food(1, "Хлеб", "Отобранный у туристов особенно вкусный", 2);
 
         foods.add(food0);
         foods.add(food1);

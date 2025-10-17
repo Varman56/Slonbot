@@ -76,15 +76,16 @@ public class Controller {
                 return -1;
             }
         }
-        return listSize - 1 - digitId;
+        if (digitId < 0 || digitId >= listSize) {
+            onUnknownId();
+            return -1;
+        }
+        return digitId;
     }
 
     void onEatingRequest(String foodId) {
         int id = checkListId(foodId, 0);
-        if (id < 0) {
-            onUnknownId();
-            return;
-        }
+        if (id < 0)   return;
         Food food = database.getFoodById(id);
         view.showAdditional("Мммм " + food.title() + ". Обожаю!");
 
@@ -93,10 +94,7 @@ public class Controller {
 
     void onWorkRequest(String WorkId) {
         int id = checkListId(WorkId, 1);
-        if (id < 0) {
-            onUnknownId();
-            return;
-        }
+        if (id < 0)  return;
         Work work = database.getWorkById(id);
         view.showAdditional("Пора вкалывать...");
         try {
