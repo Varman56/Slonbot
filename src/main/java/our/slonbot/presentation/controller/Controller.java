@@ -24,7 +24,7 @@ public class Controller {
         view.showWelcome();
 
         while (true) {
-            String[] args = reader.readLine().split("");
+            String[] args = reader.readLine().split(" ");
             if (args.length == 0) {
                 continue;
             }

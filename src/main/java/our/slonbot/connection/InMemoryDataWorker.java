@@ -29,14 +29,14 @@ public class InMemoryDataWorker implements IDataWorker {
         Work work1 = new Work(0, "Поливать цветы", "", 5, 10, 3);
         Work work2 = new Work(1, "Работать на заводе", "", 15, 30, 10);
 
-        works.put(1, work1);
-        works.put(2, work2);
+        works.put(0, work1);
+        works.put(1, work2);
 
         Food food1 = new Food(0, "Трава", "", 1);
         Food food2 = new Food(1, "Хлеб", "", 2);
 
-        foods.put(1, food1);
-        foods.put(2, food2);
+        foods.put(0, food1);
+        foods.put(1, food2);
     }
 
     public Player getPlayerById(long id) {

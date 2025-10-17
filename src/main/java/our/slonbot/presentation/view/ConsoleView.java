@@ -41,6 +41,7 @@ public class ConsoleView implements IView {
                 %d
                 ----------------
                 """, food.title(), food.description(), food.exp());
+            System.out.println(formattedString);
         }
     }
     public void showWork(List<Work> workList) {
@@ -56,6 +57,7 @@ public class ConsoleView implements IView {
                 
                 ----------------
                 """, work.title(), work.description(), work.exp());
+            System.out.println(formattedString);
         }
     }
     public void showAdditional(String s){
