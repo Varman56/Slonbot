@@ -38,7 +38,7 @@ class InMemoryDataWorkerTest {
         Work work = dataWorker.getWorkById(0);
         assertNotNull(work);
         assertEquals(0, work.id());
-        assertEquals("Работать на заводе", work.title());
+        assertEquals("Поливать цветы", work.title());
     }
 
     @Test
@@ -52,7 +52,7 @@ class InMemoryDataWorkerTest {
         Food food = dataWorker.getFoodById(0);
         assertNotNull(food);
         assertEquals(0, food.id());
-        assertEquals("Хлеб", food.title());
+        assertEquals("Трава", food.title());
     }
 
     @Test

@@ -83,15 +83,15 @@ class ConsoleViewTest {
 
     @Test
     void showWork_printsWorkList() {
-        Work work1 = new Work(1, "Поливать цветы", "Описание1", 5, 10, 3);
-        Work work2 = new Work(0, "Работать на заводе", "Описание2", 15, 30, 10);
+        Work work1 = new Work(0, "Поливать цветы", "Описание1", 5, 10, 3);
+        Work work2 = new Work(1, "Работать на заводе", "Описание2", 15, 30, 10);
         List<Work> workList = Arrays.asList(work1, work2);
         consoleView.showWork(workList);
 
         String output = outContent.toString();
         assertTrue(output.contains("Доступная работа"));
-        assertTrue(output.contains("Поливать цветы - 1\n\nОписание1\nдает опыта\n5\nдает денег\n10"));
-        assertTrue(output.contains("Работать на заводе - 0\n\nОписание2\nдает опыта\n15\nдает денег\n30"));
+        assertTrue(output.contains("Поливать цветы - 0\n\nОписание1\nдает опыта\n5\nдает денег\n3"));
+        assertTrue(output.contains("Работать на заводе - 1\n\nОписание2\nдает опыта\n15\nдает денег\n10"));
     }
 
     @Test
