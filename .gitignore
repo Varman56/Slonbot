@@ -41,4 +41,4 @@ bin/
 .DS_Store
 
 ### Databases ###
-.db
+*.db
