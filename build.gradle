@@ -1,5 +1,10 @@
 plugins {
     id 'java'
+    id 'jacoco'
+}
+
+jacoco {
+    toolVersion = "0.8.11" // Использование стабильной версии JaCoCo
 }
 
 compileJava {
@@ -12,6 +17,7 @@ compileTestJava {
 
 tasks.withType(JavaExec) {
     systemProperty "file.encoding", "UTF-8"
+    jvmArgs += "--enable-native-access=ALL-UNNAMED"
 }
 
 group = 'our.slonbot'
@@ -25,8 +31,20 @@ dependencies {
     testImplementation platform('org.junit:junit-bom:5.10.0')
     testImplementation 'org.junit.jupiter:junit-jupiter'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    implementation 'org.xerial:sqlite-jdbc:3.45.1.0'
+    implementation 'org.slf4j:slf4j-simple:2.0.12'
 }
 
 test {
     useJUnitPlatform()
+    finalizedBy jacocoTestReport
+}
+
+jacocoTestReport {
+    dependsOn test
+    reports {
+        xml.required = false
+        csv.required = false
+        html.required = false
+    }
 }

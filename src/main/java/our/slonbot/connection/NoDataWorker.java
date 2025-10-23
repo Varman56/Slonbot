@@ -17,7 +17,7 @@ public class NoDataWorker implements IDataWorker {
         return true;
     }
 
-    public boolean updatePlayerExpMoney(long id, long deltaExp, int deltaMoney) {
+    public boolean updatePlayerExpAndMoney(long id, long deltaExp, int deltaMoney) {
         return true;
     }
 

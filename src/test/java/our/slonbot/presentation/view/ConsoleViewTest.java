@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import our.slonbot.model.Food;
 import our.slonbot.model.Player;
 import our.slonbot.model.Work;
+import our.slonbot.presentation.TextConstants;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
@@ -34,21 +35,13 @@ class ConsoleViewTest {
     @Test
     void showWelcome_printsWelcomeMessage() {
         consoleView.showWelcome();
-        assertTrue(outContent.toString().contains("Привет! Это слон бот! Напиши help чтобы узнать что ты можешь!"));
+        assertTrue(outContent.toString().contains(TextConstants.WELCOME_MESSAGE));
     }
 
     @Test
     void showHelp_printsHelpMessage() {
         consoleView.showHelp();
-        String expectedOutput = """
-                help - выводит помощь
-                stat - показывает вашего слона
-                eat - показывает доступную еду
-                eat <id еды> - кормит определенной едой
-                work - показывает доступную работу
-                work <id работы> - отправляет слона на работу
-                """;
-        assertTrue(outContent.toString().contains(expectedOutput));
+        assertTrue(outContent.toString().contains(TextConstants.HELP_MESSAGE));
     }
 
     @Test
@@ -60,11 +53,15 @@ class ConsoleViewTest {
         player.money = 200;
         consoleView.showStat(player);
         String expectedOutput = String.format("""
-                Имя слона: %s 
-                Возраст: %d
-                Опыт: %d
-                Денег: %d
-                """, player.name, player.level, player.exp, player.money);
+                %s
+                %s
+                %s
+                %s
+                """,
+                String.format(TextConstants.PLAYER_STAT_NAME, player.name),
+                String.format(TextConstants.PLAYER_STAT_AGE, player.level),
+                String.format(TextConstants.PLAYER_STAT_EXP, player.exp),
+                String.format(TextConstants.PLAYER_STAT_MONEY, player.money));
         assertTrue(outContent.toString().contains(expectedOutput));
     }
 
@@ -76,9 +73,9 @@ class ConsoleViewTest {
         consoleView.showFood(foodList);
 
         String output = outContent.toString();
-        assertTrue(output.contains("Доступная еда"));
-        assertTrue(output.contains("Трава - 1\n\nЗелененькая\nдает опыта\n10"));
-        assertTrue(output.contains("Хлеб - 0\n\nВкусный\nдает опыта\n20"));
+        assertTrue(output.contains(TextConstants.AVAILABLE_FOOD_HEADER));
+        assertTrue(output.contains(String.format("Трава - %d\n\nЗелененькая\n%s\n10\n%s", food1.id(), TextConstants.FOOD_DESCRIPTION_EXP, TextConstants.SEPARATOR)));
+        assertTrue(output.contains(String.format("Хлеб - %d\n\nВкусный\n%s\n20\n%s", food2.id(), TextConstants.FOOD_DESCRIPTION_EXP, TextConstants.SEPARATOR)));
     }
 
     @Test
@@ -89,9 +86,9 @@ class ConsoleViewTest {
         consoleView.showWork(workList);
 
         String output = outContent.toString();
-        assertTrue(output.contains("Доступная работа"));
-        assertTrue(output.contains("Поливать цветы - 0\n\nОписание1\nдает опыта\n5\nдает денег\n3"));
-        assertTrue(output.contains("Работать на заводе - 1\n\nОписание2\nдает опыта\n15\nдает денег\n10"));
+        assertTrue(output.contains(TextConstants.AVAILABLE_WORK_HEADER));
+        assertTrue(output.contains(String.format("Поливать цветы - %d\n\nОписание1\n%s\n5\n%s\n3\n%s", work1.id(), TextConstants.WORK_DESCRIPTION_EXP, TextConstants.WORK_DESCRIPTION_MONEY, TextConstants.SEPARATOR)));
+        assertTrue(output.contains(String.format("Работать на заводе - %d\n\nОписание2\n%s\n15\n%s\n10\n%s", work2.id(), TextConstants.WORK_DESCRIPTION_EXP, TextConstants.WORK_DESCRIPTION_MONEY, TextConstants.SEPARATOR)));
     }
 
     @Test

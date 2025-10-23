@@ -1,13 +1,13 @@
 package our.slonbot.presentation.controller;
 
 import our.slonbot.connection.IDataWorker;
-import our.slonbot.connection.InMemoryDataWorker;
 import our.slonbot.model.AppType;
 import our.slonbot.model.Food;
 import our.slonbot.model.Player;
 import our.slonbot.model.Work;
 import our.slonbot.presentation.view.IView;
 import our.slonbot.reader.IReader;
+import our.slonbot.presentation.TextConstants;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -16,19 +16,18 @@ public class Controller {
 
     private final IView view;
     private final IReader reader;
-    private final IDataWorker database;
+    private final IDataWorker worker;
 
-    public Controller(IReader reader, IView view, IDataWorker database) {
+    public Controller(IReader reader, IView view, IDataWorker worker) {
         this.view = view;
         this.reader = reader;
-        this.database = database;
+        this.worker = worker;
     }
 
     public void start() {
         view.showWelcome();
-        AppType appType = AppType.Console;
-        IDataWorker dataWorker = new InMemoryDataWorker();
-        Player player = dataWorker.getPlayer(appType,0);
+        AppType appType = AppType.Console; // It will handler route
+        Player player = worker.getPlayer(appType, 0); // It will handler route
         while (true) {
             String[] args = reader.readLine().split(" ");
             if (args.length == 0) {
@@ -57,46 +56,68 @@ public class Controller {
     }
 
     private void onUnknownCommand() {
-        view.showAdditional("Я тебя непонимат :--(");
+        view.showAdditional(TextConstants.UNKNOWN_COMMAND_MESSAGE);
     }
+
     private void onUnknownId() {
-        view.showAdditional("Id неверный");
+        view.showAdditional(TextConstants.UNKNOWN_ID_MESSAGE);
     }
+
     private void onError() {
-        view.showAdditional("Внутренняя обшибка");
+        view.showAdditional(TextConstants.INTERNAL_ERROR_MESSAGE);
+    }
+
+    public boolean EatFood(Player player, String foodName) {
+        Food food = Food.foodMap.get(foodName);
+        if (worker.updatePlayerExp(player.id, food.exp())) {
+            player.exp += food.exp();
+            return true;
+        }
+        return false;
     }
 
     void onEatingRequest(Player player, String foodId) {
-        if(!Food.foodMap.containsKey(foodId)){
-            view.showAdditional("Неправильное название еды");
+        if (!Food.foodMap.containsKey(foodId)) {
+            view.showAdditional(TextConstants.WRONG_FOOD_NAME_MESSAGE);
             return;
         }
         Food food = Food.foodMap.get(foodId);
-        if (player.EatFood(foodId)) {
-            view.showAdditional("Мммм " + food.title() + ". Обожаю!");
-        }else {
+        if (!EatFood(player, foodId)) {
             onError();
+            return;
         }
+        view.showAdditional(TextConstants.EAT_SUCCESS_MESSAGE_PREFIX + food.title() + TextConstants.EAT_SUCCESS_MESSAGE_SUFFIX);
+    }
+
+    public boolean GoToWork(Player player, String WorkId) {
+        Work work = Work.workMap.get(WorkId);
+        if (worker.updatePlayerExpAndMoney(player.id, work.exp(), work.money())) {
+            player.exp += work.exp();
+            player.money += work.money();
+            return true;
+        }
+        return false;
     }
 
     void onWorkRequest(Player player, String WorkId) {
-        if(!Work.workMap.containsKey(WorkId)){
-            view.showAdditional("Неправильное название работы");
+        if (!Work.workMap.containsKey(WorkId)) {
+            view.showAdditional(TextConstants.WRONG_WORK_NAME_MESSAGE);
             return;
         }
         Work work = Work.workMap.get(WorkId);
-        if(!player.GoToWork(WorkId)){
-            onError();
-            return;
-        }
-        view.showAdditional("Пора вкалывать...");
+        view.showAdditional(TextConstants.WORK_START_MESSAGE);
         try {
             TimeUnit.SECONDS.sleep(work.time());
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }
-        view.showAdditional("А вот и ЗП капнула!");
+        if (!GoToWork(player, WorkId)) {
+            onError();
+            return;
+        }
+        view.showAdditional(TextConstants.WORK_END_MESSAGE);
     }
+
 
     void onStatRequest(Player player) {
         view.showStat(player);

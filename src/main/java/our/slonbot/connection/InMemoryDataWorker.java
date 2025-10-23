@@ -20,7 +20,6 @@ public class InMemoryDataWorker implements IDataWorker {
         currentPlayer.id = CONSOLE_PLAYER_ID;
         currentPlayer.name = "ConsolePlayer";
         currentPlayer.level = 1;
-        currentPlayer.dataWorker = new NoDataWorker();
         return currentPlayer;
     }
 
@@ -37,7 +36,7 @@ public class InMemoryDataWorker implements IDataWorker {
         currentPlayer.money += deltaMoney;
         return true;
     }
-    public boolean updatePlayerExpMoney(long id, long deltaExp, int deltaMoney) {
+    public boolean updatePlayerExpAndMoney(long id, long deltaExp, int deltaMoney) {
         currentPlayer.money += deltaMoney;
         currentPlayer.exp += deltaExp;
         return true;

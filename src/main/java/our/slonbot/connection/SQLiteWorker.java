@@ -11,7 +11,7 @@ import java.sql.ResultSet;
 
 public class SQLiteWorker implements IDataWorker {
 
-    private static final String DB_URL = "jdbc:sqlite:slonbot.db";
+    private static final String DB_URL = "jdbc:sqlite:src/main/resources/slonbot.db";
 
     public SQLiteWorker() {
         try (Connection connection = DriverManager.getConnection(DB_URL)) {
@@ -32,7 +32,7 @@ public class SQLiteWorker implements IDataWorker {
                 statement.setInt(2, appId);
                 ResultSet resultSet = statement.executeQuery();
                 if (resultSet.next()) {
-                    Player player = new Player(
+                    return  new Player(
                             resultSet.getLong("id"),
                             AppType.valueOf(resultSet.getString("app_type")),
                             resultSet.getInt("app_id"),
@@ -41,13 +41,12 @@ public class SQLiteWorker implements IDataWorker {
                             resultSet.getInt("level"),
                             resultSet.getInt("money")
                     );
-                    return player;
                 }
             }
             // If player not found, create a new one
             return createPlayer(appType, appId, connection);
         } catch (SQLException e) {
-            System.err.println("Error getting or creating player: " + e.getMessage());
+            // log
             return null;
         }
     }
@@ -85,35 +84,35 @@ public class SQLiteWorker implements IDataWorker {
 
     @Override
     public boolean updatePlayerExp(long id, long deltaExp) {
-        String updateSql = "UPDATE players SET exp = exp + ? WHERE id = ?";
+        String updateSql = SQLQueries.UPDATE_PLAYER_EXP;
         try (Connection connection = DriverManager.getConnection(DB_URL);
              PreparedStatement statement = connection.prepareStatement(updateSql)) {
             statement.setLong(1, deltaExp);
             statement.setLong(2, id);
             return statement.executeUpdate() > 0;
         } catch (SQLException e) {
-            System.err.println("Error updating player experience: " + e.getMessage());
+            // log
             return false;
         }
     }
 
     @Override
     public boolean updatePlayerMoney(long id, int deltaMoney) {
-        String updateSql = "UPDATE players SET money = money + ? WHERE id = ?";
+        String updateSql = SQLQueries.UPDATE_PLAYER_MONEY;
         try (Connection connection = DriverManager.getConnection(DB_URL);
              PreparedStatement statement = connection.prepareStatement(updateSql)) {
             statement.setInt(1, deltaMoney);
             statement.setLong(2, id);
             return statement.executeUpdate() > 0;
         } catch (SQLException e) {
-            System.err.println("Error updating player money: " + e.getMessage());
+            // logs
             return false;
         }
     }
 
     @Override
     public boolean updatePlayerExpAndMoney(long id, long deltaExp, int deltaMoney) {
-        String updateSql = "UPDATE players SET exp = exp + ?, money = money + ? WHERE id = ?";
+        String updateSql = SQLQueries.UPDATE_PLAYER;
         try (Connection connection = DriverManager.getConnection(DB_URL);
              PreparedStatement statement = connection.prepareStatement(updateSql)) {
             statement.setLong(1, deltaExp);
@@ -121,7 +120,7 @@ public class SQLiteWorker implements IDataWorker {
             statement.setLong(3, id);
             return statement.executeUpdate() > 0;
         } catch (SQLException e) {
-            System.err.println("Error updating player experience and money: " + e.getMessage());
+            // log
             return false;
         }
     }

@@ -3,61 +3,59 @@ package our.slonbot.presentation.view;
 import our.slonbot.model.Food;
 import our.slonbot.model.Player;
 import our.slonbot.model.Work;
+import our.slonbot.presentation.TextConstants;
 
 import java.util.List;
 
 public class ConsoleView implements IView {
     public void showWelcome() {
-        System.out.println("Привет! Это слон бот! Напиши help чтобы узнать что ты можешь!");
+        System.out.println(TextConstants.WELCOME_MESSAGE);
     }
     public void showHelp() {
-        System.out.println("""
-                help - выводит помощь
-                stat - показывает вашего слона
-                eat - показывает доступную еду
-                eat <id еды> - кормит определенной едой
-                work - показывает доступную работу
-                work <id работы> - отправляет слона на работу
-                """);
+        System.out.println(TextConstants.HELP_MESSAGE);
     }
     public void showStat(Player player) {
         String formattedString = String.format("""
-                Имя слона: %s 
-                Возраст: %d
-                Опыт: %d
-                Денег: %d
-                """, player.name, player.level, player.exp, player.money);
+                %s
+                %s
+                %s
+                %s
+                """,
+                String.format(TextConstants.PLAYER_STAT_NAME, player.name),
+                String.format(TextConstants.PLAYER_STAT_AGE, player.level),
+                String.format(TextConstants.PLAYER_STAT_EXP, player.exp),
+                String.format(TextConstants.PLAYER_STAT_MONEY, player.money));
         System.out.println(formattedString);
     }
     public void showFood(Iterable<Food> foodList) {
-        System.out.println("Доступная еда");
-        System.out.println("----------------");
+        System.out.println(TextConstants.AVAILABLE_FOOD_HEADER);
+        System.out.println(TextConstants.SEPARATOR);
         for (Food food : foodList) {
             String formattedString = String.format("""
                 %s - %d
                 
                 %s
-                дает опыта
+                %s
                 %d
-                ----------------
-                """, food.title(), food.id(), food.description(), food.exp());
+                %s
+                """, food.title(), food.id(), food.description(), TextConstants.FOOD_DESCRIPTION_EXP, food.exp(), TextConstants.SEPARATOR);
             System.out.println(formattedString);
         }
     }
     public void showWork(Iterable<Work> workList) {
-        System.out.println("Доступная работа");
-        System.out.println("----------------");
+        System.out.println(TextConstants.AVAILABLE_WORK_HEADER);
+        System.out.println(TextConstants.SEPARATOR);
         for (Work work : workList) {
             String formattedString = String.format("""
                 %s - %d
                 
                 %s
-                дает опыта
+                %s
                 %d
-                дает денег
+                %s
                 %d
-                ----------------
-                """, work.title(), work.id(), work.description(), work.exp(), work.money());
+                %s
+                """, work.title(), work.id(), work.description(), TextConstants.WORK_DESCRIPTION_EXP, work.exp(), TextConstants.WORK_DESCRIPTION_MONEY, work.money(), TextConstants.SEPARATOR);
             System.out.println(formattedString);
         }
     }
