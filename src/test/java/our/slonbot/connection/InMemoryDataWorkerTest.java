@@ -34,49 +34,6 @@ class InMemoryDataWorkerTest {
     }
 
     @Test
-    void getWorkById_validId_returnsWork() {
-        Work work = dataWorker.getWorkById(0);
-        assertNotNull(work);
-        assertEquals(0, work.id());
-        assertEquals("Поливать цветы", work.title());
-    }
-
-    @Test
-    void getWorkById_invalidId_throwsException() {
-        assertThrows(IllegalArgumentException.class, () -> dataWorker.getWorkById(-1));
-        assertThrows(IllegalArgumentException.class, () -> dataWorker.getWorkById(100));
-    }
-
-    @Test
-    void getFoodById_validId_returnsFood() {
-        Food food = dataWorker.getFoodById(0);
-        assertNotNull(food);
-        assertEquals(0, food.id());
-        assertEquals("Трава", food.title());
-    }
-
-    @Test
-    void getFoodById_invalidId_throwsException() {
-        assertThrows(IllegalArgumentException.class, () -> dataWorker.getFoodById(-1));
-        assertThrows(IllegalArgumentException.class, () -> dataWorker.getFoodById(100));
-    }
-
-    @Test
-    void setWorkActivity_validIds_noException() {
-        assertDoesNotThrow(() -> dataWorker.setWorkActivity(0L, 0));
-    }
-
-    @Test
-    void setWorkActivity_invalidPlayerId_throwsException() {
-        assertThrows(IllegalArgumentException.class, () -> dataWorker.setWorkActivity(1L, 0));
-    }
-
-    @Test
-    void setWorkActivity_invalidWorkId_throwsException() {
-        assertThrows(IllegalArgumentException.class, () -> dataWorker.setWorkActivity(0L, -1));
-    }
-
-    @Test
     void updatePlayerExp_validId_updatesExperience() {
         Player player = dataWorker.getPlayerById(0L);
         long initialExp = player.exp;
@@ -100,23 +57,5 @@ class InMemoryDataWorkerTest {
     @Test
     void updatePlayerMoney_invalidId_throwsException() {
         assertThrows(IllegalArgumentException.class, () -> dataWorker.updatePlayerMoney(1L, 100));
-    }
-
-    @Test
-    void getAllWorks_returnsAllWorks() {
-        List<Work> works = dataWorker.getAllWorks();
-        assertNotNull(works);
-        assertEquals(2, works.size());
-        assertEquals("Поливать цветы", works.get(0).title());
-        assertEquals("Работать на заводе", works.get(1).title());
-    }
-
-    @Test
-    void getAllFoods_returnsAllFoods() {
-        List<Food> foods = dataWorker.getAllFoods();
-        assertNotNull(foods);
-        assertEquals(2, foods.size());
-        assertEquals("Трава", foods.get(0).title());
-        assertEquals("Хлеб", foods.get(1).title());
     }
 }

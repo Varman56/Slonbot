@@ -10,8 +10,8 @@ public interface IView {
     void showWelcome();
     void showHelp();
     void showStat(Player player);
-    void showFood(List<Food> foodList);
-    void showWork(List<Work> workList);
+    void showFood(Iterable<Food> foodList);
+    void showWork(Iterable<Work> workList);
     void showAdditional(String s);
     // TODO: Slonyara functionality
 }

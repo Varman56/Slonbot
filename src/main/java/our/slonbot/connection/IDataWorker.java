@@ -1,5 +1,6 @@
 package our.slonbot.connection;
 
+import our.slonbot.model.AppType;
 import our.slonbot.model.Food;
 import our.slonbot.model.Player;
 import our.slonbot.model.Work;
@@ -7,19 +8,10 @@ import our.slonbot.model.Work;
 import java.util.List;
 
 public interface IDataWorker {
-    Player getPlayerById(long id);
+    Player getPlayer(AppType appType, int appId);
+    boolean updatePlayerExp(long id, long deltaExp);
 
-    Work getWorkById(int id);
+    boolean updatePlayerMoney(long id, int deltaMoney);
 
-    Food getFoodById(int id);
-
-    void setWorkActivity(long playerId, int workId);
-
-    void updatePlayerExp(long id, long deltaExp);
-
-    void updatePlayerMoney(long id, int deltaMoney);
-
-    List<Food> getAllFoods();
-
-    List<Work> getAllWorks();
+    boolean updatePlayerExpMoney(long id, long deltaExp, int deltaMoney);
 }

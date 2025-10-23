@@ -1,11 +1,15 @@
 package our.slonbot.presentation.controller;
 
 import our.slonbot.connection.IDataWorker;
+import our.slonbot.connection.InMemoryDataWorker;
+import our.slonbot.model.AppType;
 import our.slonbot.model.Food;
+import our.slonbot.model.Player;
 import our.slonbot.model.Work;
 import our.slonbot.presentation.view.IView;
 import our.slonbot.reader.IReader;
 
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 public class Controller {
@@ -22,7 +26,9 @@ public class Controller {
 
     public void start() {
         view.showWelcome();
-
+        AppType appType = AppType.Console;
+        IDataWorker dataWorker = new InMemoryDataWorker();
+        Player player = dataWorker.getPlayer(appType,0);
         while (true) {
             String[] args = reader.readLine().split(" ");
             if (args.length == 0) {
@@ -31,71 +37,58 @@ public class Controller {
             switch (args[0]) {
                 case "eat" -> {
                     switch (args.length) {
-                        case 1 -> view.showFood(database.getAllFoods());
-                        case 2 -> onEatingRequest(args[1]);
+                        case 1 -> view.showFood(Food.foodMap.values());
+                        case 2 -> onEatingRequest(player, args[1]);
                         default -> onUnknownCommand();
                     }
                 }
                 case "work" -> {
                     switch (args.length) {
-                        case 1 -> view.showWork(database.getAllWorks());
-                        case 2 -> onWorkRequest(args[1]);
+                        case 1 -> view.showWork((List<Work>) Work.workMap.values());
+                        case 2 -> onWorkRequest(player, args[1]);
                         default -> onUnknownCommand();
                     }
                 }
-                case "stat" -> onStatRequest();
+                case "stat" -> onStatRequest(player);
                 case "help" -> view.showHelp();
                 default -> onUnknownCommand();
             }
         }
     }
 
-    private static boolean isPositiveInteger(String str) {
-        return str != null && str.matches("\\d+");
-    }
-
     private void onUnknownCommand() {
         view.showAdditional("Я тебя непонимат :--(");
     }
-
     private void onUnknownId() {
         view.showAdditional("Id неверный");
     }
-
-    private int checkListId(String id, int type) {
-        if (!isPositiveInteger(id)) {
-            onUnknownCommand();
-            return -1;
-        }
-        int digitId = Integer.parseInt(id);
-        int listSize;
-        switch (type) {
-            case 0 -> listSize = database.getAllFoods().size();
-            case 1 -> listSize = database.getAllWorks().size();
-            default -> {
-                return -1;
-            }
-        }
-        if (digitId < 0 || digitId >= listSize) {
-            onUnknownId();
-            return -1;
-        }
-        return digitId;
+    private void onError() {
+        view.showAdditional("Внутренняя обшибка");
     }
 
-    void onEatingRequest(String foodId) {
-        int id = checkListId(foodId, 0);
-        if (id < 0)   return;
-        Food food = database.getFoodById(id);
-        view.showAdditional("Мммм " + food.title() + ". Обожаю!");
-
-        database.updatePlayerExp(0, food.exp());
+    void onEatingRequest(Player player, String foodId) {
+        if(!Food.foodMap.containsKey(foodId)){
+            view.showAdditional("Неправильное название еды");
+            return;
+        }
+        Food food = Food.foodMap.get(foodId);
+        if (player.EatFood(foodId)) {
+            view.showAdditional("Мммм " + food.title() + ". Обожаю!");
+        }else {
+            onError();
+        }
     }
 
-    void onWorkRequest(String WorkId) {
-        int id = checkListId(WorkId, 1);
-        if (id < 0)  return;
-        Work work = database.getWorkById(id);
+    void onWorkRequest(Player player, String WorkId) {
+        if(!Work.workMap.containsKey(WorkId)){
+            view.showAdditional("Неправильное название работы");
+            return;
+        }
+        Work work = Work.workMap.get(WorkId);
+        if(!player.GoToWork(WorkId)){
+            onError();
+            return;
+        }
         view.showAdditional("Пора вкалывать...");
         try {
             TimeUnit.SECONDS.sleep(work.time());
@@ -103,12 +96,9 @@ public class Controller {
             Thread.currentThread().interrupt();
         }
         view.showAdditional("А вот и ЗП капнула!");
-
-        database.updatePlayerExp(0, work.exp());
-        database.updatePlayerMoney(0, work.money());
     }
 
-    void onStatRequest() {
-        view.showStat(database.getPlayerById(0));
+    void onStatRequest(Player player) {
+        view.showStat(player);
     }
 }

@@ -29,7 +29,7 @@ public class ConsoleView implements IView {
                 """, player.name, player.level, player.exp, player.money);
         System.out.println(formattedString);
     }
-    public void showFood(List<Food> foodList) {
+    public void showFood(Iterable<Food> foodList) {
         System.out.println("Доступная еда");
         System.out.println("----------------");
         for (Food food : foodList) {
@@ -44,7 +44,7 @@ public class ConsoleView implements IView {
             System.out.println(formattedString);
         }
     }
-    public void showWork(List<Work> workList) {
+    public void showWork(Iterable<Work> workList) {
         System.out.println("Доступная работа");
         System.out.println("----------------");
         for (Work work : workList) {
