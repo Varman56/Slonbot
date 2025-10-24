@@ -29,29 +29,35 @@ public class Controller {
         AppType appType = AppType.Console; // It will handler route
         Player player = worker.getPlayer(appType, 0); // It will handler route
         while (true) {
-            String[] args = reader.readLine().split(" ");
-            if (args.length == 0) {
-                continue;
-            }
-            switch (args[0]) {
-                case "eat" -> {
-                    switch (args.length) {
-                        case 1 -> view.showFood(Food.foodMap.values());
-                        case 2 -> onEatingRequest(player, args[1]);
-                        default -> onUnknownCommand();
-                    }
+            var command = reader.readLine();
+            onCommand(player, command);
+
+        }
+    }
+
+    public void onCommand(Player player, String command) {
+        String[] args = command.split(" ");
+        if (args.length == 0) {
+            return;
+        }
+        switch (args[0]) {
+            case "eat" -> {
+                switch (args.length) {
+                    case 1 -> view.showFood(Food.foodMap.values());
+                    case 2 -> onEatingRequest(player, args[1]);
+                    default -> onUnknownCommand();
                 }
-                case "work" -> {
-                    switch (args.length) {
-                        case 1 -> view.showWork((List<Work>) Work.workMap.values());
-                        case 2 -> onWorkRequest(player, args[1]);
-                        default -> onUnknownCommand();
-                    }
-                }
-                case "stat" -> onStatRequest(player);
-                case "help" -> view.showHelp();
-                default -> onUnknownCommand();
             }
+            case "work" -> {
+                switch (args.length) {
+                    case 1 -> view.showWork((List<Work>) Work.workMap.values());
+                    case 2 -> onWorkRequest(player, args[1]);
+                    default -> onUnknownCommand();
+                }
+            }
+            case "stat" -> onStatRequest(player);
+            case "help" -> view.showHelp();
+            default -> onUnknownCommand();
         }
     }
 
