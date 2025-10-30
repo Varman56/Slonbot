@@ -3,7 +3,7 @@ package our.slonbot.connection;
 import our.slonbot.model.AppType;
 import our.slonbot.model.Player;
 
-public class NoDataWorker implements IDataWorker {
+public class NoDataManager implements IDataManager {
 
     public Player getPlayer(AppType appType, int appId) {
         return new Player();

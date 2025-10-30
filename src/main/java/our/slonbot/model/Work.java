@@ -1,16 +1,17 @@
 package our.slonbot.model;
 
-import java.util.TreeMap;
+public class Work {
+    int id;
+    String name;
+    String description;
+    long exp;
+    long time;
+    int money;
 
-public record Work(
-        int id,
-        String title,
-        String description,
-        long exp,
-        long time,
-        int money) {
-    public static TreeMap<String, Work> workMap =new TreeMap<String,Work>(){{
-        put("piss", new Work(0, "Поливать цветы", "Зачем-то же хобот растёт, правда?", 5, 10, 3));
-        put("slave", new Work(1, "Работать на заводе", "Мой дед работал на заводе, мой батя работал на заводе", 15, 30, 10));
-    }};
+    Work(String title, String description, int exp, int money) {
+        this.name = title;
+        this.description = description;
+        this.exp = exp;
+        this.money = money;
+    }
 }

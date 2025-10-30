@@ -1,6 +1,5 @@
 package our.slonbot.presentation.controller;
 
-import our.slonbot.connection.IDataWorker;
 import our.slonbot.model.AppType;
 import our.slonbot.model.Food;
 import our.slonbot.model.Player;
@@ -8,6 +7,7 @@ import our.slonbot.model.Work;
 import our.slonbot.presentation.view.IView;
 import our.slonbot.reader.IReader;
 import our.slonbot.presentation.TextConstants;
+import our.slonbot.worker.IWorker;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -16,9 +16,9 @@ public class Controller {
 
     private final IView view;
     private final IReader reader;
-    private final IDataWorker worker;
+    private final IWorker worker;
 
-    public Controller(IReader reader, IView view, IDataWorker worker) {
+    public Controller(IReader reader, IView view, IWorker worker) {
         this.view = view;
         this.reader = reader;
         this.worker = worker;
@@ -27,15 +27,14 @@ public class Controller {
     public void start() {
         view.showWelcome();
         AppType appType = AppType.Console; // It will handler route
-        Player player = worker.getPlayer(appType, 0); // It will handler route
+        long playerId = 0; // It will handler route
         while (true) {
             var command = reader.readLine();
-            onCommand(player, command);
-
+            onCommand(playerId, appType, command);
         }
     }
 
-    public void onCommand(Player player, String command) {
+    public void onCommand(long PlayerId, AppType appType, String command) {
         String[] args = command.split(" ");
         if (args.length == 0) {
             return;
@@ -43,66 +42,40 @@ public class Controller {
         switch (args[0]) {
             case "eat" -> {
                 switch (args.length) {
-                    case 1 -> view.showFood(Food.foodMap.values());
-                    case 2 -> onEatingRequest(player, args[1]);
+                    case 1 -> view.showFood(Food.foodMap.values()); // worker.get_food_list
+                    case 2 -> onEatingRequest(args[1]); //
                     default -> onUnknownCommand();
                 }
             }
             case "work" -> {
                 switch (args.length) {
-                    case 1 -> view.showWork((List<Work>) Work.workMap.values());
-                    case 2 -> onWorkRequest(player, args[1]);
+                    case 1 -> view.showWork((List<Work>) Work.workMap.values());  // worker.get_work_list
+                    case 2 -> worker.onWorkRequest(args[1]);
                     default -> onUnknownCommand();
                 }
             }
-            case "stat" -> onStatRequest(player);
+            case "stat" -> onStatRequest();
             case "help" -> view.showHelp();
             default -> onUnknownCommand();
         }
     }
 
-    private void onUnknownCommand() {
-        view.showAdditional(TextConstants.UNKNOWN_COMMAND_MESSAGE);
+
+
+    void onEatRequest(long PlayerId, AppType appType, String foodName) {
+
     }
 
-    private void onUnknownId() {
-        view.showAdditional(TextConstants.UNKNOWN_ID_MESSAGE);
+    void onWorkRequest(String workName) {
+
     }
 
-    private void onError() {
-        view.showAdditional(TextConstants.INTERNAL_ERROR_MESSAGE);
+    void onStatRequest() {
+
     }
 
-    public boolean EatFood(Player player, String foodName) {
-        Food food = Food.foodMap.get(foodName);
-        if (worker.updatePlayerExp(player.id, food.exp())) {
-            player.exp += food.exp();
-            return true;
-        }
-        return false;
-    }
+    void onEatingRequest(String foodId) {
 
-    void onEatingRequest(Player player, String foodId) {
-        if (!Food.foodMap.containsKey(foodId)) {
-            view.showAdditional(TextConstants.WRONG_FOOD_NAME_MESSAGE);
-            return;
-        }
-        Food food = Food.foodMap.get(foodId);
-        if (!EatFood(player, foodId)) {
-            onError();
-            return;
-        }
-        view.showAdditional(TextConstants.EAT_SUCCESS_MESSAGE_PREFIX + food.title() + TextConstants.EAT_SUCCESS_MESSAGE_SUFFIX);
-    }
-
-    public boolean GoToWork(Player player, String WorkId) {
-        Work work = Work.workMap.get(WorkId);
-        if (worker.updatePlayerExpAndMoney(player.id, work.exp(), work.money())) {
-            player.exp += work.exp();
-            player.money += work.money();
-            return true;
-        }
-        return false;
     }
 
     void onWorkRequest(Player player, String WorkId) {
@@ -124,8 +97,15 @@ public class Controller {
         view.showAdditional(TextConstants.WORK_END_MESSAGE);
     }
 
-
     void onStatRequest(Player player) {
         view.showStat(player);
+    }
+
+    private void onUnknownCommand() {
+        view.showAdditional(TextConstants.UNKNOWN_COMMAND_MESSAGE);
+    }
+
+    private void onError() {
+        view.showAdditional(TextConstants.INTERNAL_ERROR_MESSAGE);
     }
 }

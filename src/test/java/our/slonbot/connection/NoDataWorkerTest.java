@@ -9,11 +9,11 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class NoDataWorkerTest {
 
-    private NoDataWorker dataWorker;
+    private NoDataManager dataWorker;
 
     @BeforeEach
     void setUp() {
-        dataWorker = new NoDataWorker();
+        dataWorker = new NoDataManager();
     }
 
     @Test
