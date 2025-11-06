@@ -1,4 +1,4 @@
-package our.slonbot.connection;
+package our.slonbot.connection.sql;
 
 public class SQLQueries {
     public static final String CREATE_TABLES = """
@@ -61,4 +61,10 @@ public class SQLQueries {
 
     public static final String UPDATE_PLAYER =
             "UPDATE players SET exp = exp + ?, money = money + ? WHERE app_type = ? AND app_id = ?";
+
+    // JPQL Queries for HibernateDataManager
+    public static final String JPQL_SELECT_FOOD_BY_NAME = "FROM Food WHERE name = :name";
+    public static final String JPQL_SELECT_WORK_BY_NAME = "FROM Work WHERE name = :name";
+    public static final String JPQL_SELECT_ALL_FOOD = "FROM Food";
+    public static final String JPQL_SELECT_ALL_WORK = "FROM Work";
 }
