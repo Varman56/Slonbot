@@ -5,21 +5,23 @@ import our.slonbot.presentation.TextConstants;
 
 
 public class ConsoleView implements IView {
+    public void prepare(long a){}
     public void showWelcome() {
-        System.out.println(TextConstants.WELCOME_MESSAGE);
+        showAdditional(TextConstants.WELCOME_MESSAGE);
     }
     public void showHelp() {
-        System.out.println(TextConstants.HELP_MESSAGE);
+        showAdditional(TextConstants.HELP_MESSAGE);
     }
     public void showStat(String statMessage) {
-        System.out.println(statMessage);
+        showAdditional(statMessage);
     }
     public void showFood(String foodInfo) {
-        System.out.println(foodInfo);
+        showAdditional(foodInfo);
     }
     public void showWork(String workInfo) {
-        System.out.println(workInfo);
+        showAdditional(workInfo);
     }
+    @Override
     public void showAdditional(String s){
         System.out.println(s);
     }
