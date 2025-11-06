@@ -7,56 +7,73 @@ import our.slonbot.model.Player;
 import our.slonbot.model.Work;
 import our.slonbot.presentation.TextConstants;
 
-public class Worker implements IWorker {
-    private final IDataManager dataWorker;
+import java.util.List;
 
-    public Worker(IDataManager dataWorker) {
-        this.dataWorker = dataWorker;
+public class Worker implements IWorker {
+    private final IDataManager dataManager;
+
+    public Worker(IDataManager dataManager) {
+        this.dataManager = dataManager;
     }
 
-    public String EatFood(long PlayerId, AppType appType, String foodName) {
-        Player player = dataWorker.getPlayer(appType, PlayerId);
-        if (!dataWorker.) {
-            view.showAdditional(TextConstants.WRONG_FOOD_NAME_MESSAGE);
+    @Override
+    public String onEatingRequest(AppType appType, long playerIdValue, String foodName) {
+        Food food = dataManager.getFood(foodName);
+
+        if (food == null) {
             return TextConstants.WRONG_FOOD_NAME_MESSAGE;
         }
-        Food food = Food.foodMap.get(foodId);
-        if (!EatFood(player, foodId)) {
-            onError();
-            return;
-        }
-        view.showAdditional(TextConstants.EAT_SUCCESS_MESSAGE_PREFIX + food.title() + TextConstants.EAT_SUCCESS_MESSAGE_SUFFIX);
-        Food food = Food.foodMap.get(foodName);
-        if (dataWorker.updatePlayerExp(player.id, food.exp())) {
-            player.exp += food.exp();
-            return true;
-        }
-        return false;
-    }
 
-    public boolean GoToWork(Player player, String WorkId) {
-        Work work = Work.workMap.get(WorkId);
-        if (worker.updatePlayerExpAndMoney(player.id, work.exp(), work.money())) {
-            player.exp += work.exp();
-            player.money += work.money();
-            return true;
+        if (dataManager.updatePlayerExp(appType, playerIdValue, food.getExp())) {
+            return TextConstants.EAT_SUCCESS_MESSAGE_PREFIX + food.getName() + TextConstants.EAT_SUCCESS_MESSAGE_SUFFIX;
+        } else {
+            return TextConstants.INTERNAL_ERROR_MESSAGE;
         }
-        return false;
-    }
-
-
-    @Override
-    public boolean onEatingRequest(String foodName) {
-        return false;
     }
 
     @Override
-    public boolean onWorkRequest(String workName) {
-        return false;
+    public String onWorkRequest(AppType appType, long playerIdValue, String workName) {
+        Work work = dataManager.getWork(workName);
+
+        if (work == null) {
+            return TextConstants.WRONG_WORK_NAME_MESSAGE;
+        }
+
+        if (dataManager.updatePlayerExpAndMoney(appType, playerIdValue, work.getExp(), work.getMoney())) {
+            return TextConstants.WORK_SUCCESS_MESSAGE_PREFIX + work.getName() + TextConstants.WORK_SUCCESS_MESSAGE_SUFFIX;
+        } else {
+            return TextConstants.INTERNAL_ERROR_MESSAGE;
+        }
     }
 
     @Override
-    public boolean onStatRequest() {
-        return false;
+    public String onStatRequest(AppType appType, long playerIdValue) {
+        Player player = dataManager.getPlayer(appType, playerIdValue);
+        if (player != null) {
+            return String.format("Имя: %s\nОпыт: %d\nУровень: %d\nДеньги: %d",
+                    player.getName(), player.getExp(), player.getLevel(), player.getMoney());
+        } else {
+            return TextConstants.INTERNAL_ERROR_MESSAGE;
+        }
+    }
+
+    @Override
+    public Food getFood(String name) {
+        return dataManager.getFood(name);
+    }
+
+    @Override
+    public Work getWork(String name) {
+        return dataManager.getWork(name);
+    }
+
+    @Override
+    public List<Food> getAllFood() {
+        return dataManager.getAllFood();
+    }
+
+    @Override
+    public List<Work> getAllWork() {
+        return dataManager.getAllWork();
     }
 }

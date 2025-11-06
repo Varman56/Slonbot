@@ -11,6 +11,9 @@ public class TextConstants {
     public static final String WORK_START_MESSAGE = "Пора вкалывать...";
     public static final String WORK_END_MESSAGE = "А вот и ЗП капнула!";
 
+    public static final String WORK_SUCCESS_MESSAGE_PREFIX = "Работа выполнена! ";
+    public static final String WORK_SUCCESS_MESSAGE_SUFFIX = ". Получено опыта и денег!";
+
     // ConsoleView messages
     public static final String WELCOME_MESSAGE = "Привет! Это слон бот! Напиши help чтобы узнать что ты можешь!";
     public static final String HELP_MESSAGE = """

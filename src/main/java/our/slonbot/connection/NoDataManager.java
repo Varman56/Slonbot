@@ -1,24 +1,55 @@
 package our.slonbot.connection;
 
 import our.slonbot.model.AppType;
+import our.slonbot.model.Food;
 import our.slonbot.model.Player;
+import our.slonbot.model.PlayerByAppId;
+import our.slonbot.model.Work;
+
+import java.util.Collections;
+import java.util.List;
 
 public class NoDataManager implements IDataManager {
 
-    public Player getPlayer(AppType appType, int appId) {
-        return new Player();
+    @Override
+    public Player getPlayer(AppType appType, long playerIdValue) {
+        PlayerByAppId playerKey = new PlayerByAppId(playerIdValue, appType);
+        // Возвращаем нового игрока с фиктивным PlayerByAppId, так как данные не хранятся
+        return new Player(playerKey, "NoDataPlayer", 0, 1, 0);
     }
 
-    public boolean updatePlayerExp(long id, long deltaExp) {
+    @Override
+    public Food getFood(String name) {
+        return null;
+    }
+
+    @Override
+    public Work getWork(String name) {
+        return null;
+    }
+
+    @Override
+    public List<Food> getAllFood() {
+        return Collections.emptyList();
+    }
+
+    @Override
+    public List<Work> getAllWork() {
+        return Collections.emptyList();
+    }
+
+    @Override
+    public boolean updatePlayerExp(AppType appType, long playerIdValue, long deltaExp) {
         return true;
     }
 
-    public boolean updatePlayerMoney(long id, int deltaMoney) {
+    @Override
+    public boolean updatePlayerMoney(AppType appType, long playerIdValue, int deltaMoney) {
         return true;
     }
 
-    public boolean updatePlayerExpAndMoney(long id, long deltaExp, int deltaMoney) {
+    @Override
+    public boolean updatePlayerExpAndMoney(AppType appType, long playerIdValue, long deltaExp, int deltaMoney) {
         return true;
     }
-
 }

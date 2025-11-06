@@ -5,7 +5,6 @@ import our.slonbot.model.Food;
 import our.slonbot.model.Player;
 import our.slonbot.model.PlayerByAppId;
 import our.slonbot.model.Work;
-import our.slonbot.connection.sql.SQLQueries;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
