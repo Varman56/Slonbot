@@ -24,10 +24,7 @@ public class TextConstants {
                 work - показывает доступную работу
                 work <id работы> - отправляет слона на работу
                 """;
-    public static final String PLAYER_STAT_NAME = "Имя слона: %s ";
-    public static final String PLAYER_STAT_AGE = "Возраст: %d";
-    public static final String PLAYER_STAT_EXP = "Опыт: %d";
-    public static final String PLAYER_STAT_MONEY = "Денег: %d";
+
     public static final String AVAILABLE_FOOD_HEADER = "Доступная еда";
     public static final String SEPARATOR = "----------------";
     public static final String FOOD_DESCRIPTION_EXP = "дает опыта";

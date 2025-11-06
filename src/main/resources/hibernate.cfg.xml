@@ -17,8 +17,8 @@
         <property name="hibernate.dialect">org.hibernate.community.dialect.SQLiteDialect</property>
 
         <!-- Echo all executed SQL to stdout -->
-        <property name="hibernate.show_sql">true</property>
-        <property name="hibernate.format_sql">true</property>
+        <property name="hibernate.show_sql">false</property>
+        <property name="hibernate.format_sql">false</property>
 
         <!-- Schema auto-update settings -->
         <property name="hibernate.hbm2ddl.auto">update</property>
@@ -27,6 +27,8 @@
         <mapping class="our.slonbot.model.Food"/>
         <mapping class="our.slonbot.model.Player"/>
         <mapping class="our.slonbot.model.Work"/>
+
+
 
     </session-factory>
 </hibernate-configuration>

@@ -9,9 +9,12 @@ import our.slonbot.reader.IReader;
 import our.slonbot.reader.ScannerReader;
 import our.slonbot.worker.IWorker;
 import our.slonbot.worker.Worker;
+import our.slonbot.connection.DatabaseInitializer;
 
 public class Main {
     public static void main(String[] args) {
+        DatabaseInitializer.initialize();
+
         IReader reader = new ScannerReader();
         IView view = new ConsoleView();
         IDataManager dataManager = new HibernateDataManager();

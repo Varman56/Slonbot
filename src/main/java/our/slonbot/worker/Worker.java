@@ -26,9 +26,9 @@ public class Worker implements IWorker {
 
         if (dataManager.updatePlayerExp(appType, playerIdValue, food.getExp())) {
             return TextConstants.EAT_SUCCESS_MESSAGE_PREFIX + food.getName() + TextConstants.EAT_SUCCESS_MESSAGE_SUFFIX;
-        } else {
-            return TextConstants.INTERNAL_ERROR_MESSAGE;
         }
+
+        return TextConstants.INTERNAL_ERROR_MESSAGE;
     }
 
     @Override
@@ -41,39 +41,51 @@ public class Worker implements IWorker {
 
         if (dataManager.updatePlayerExpAndMoney(appType, playerIdValue, work.getExp(), work.getMoney())) {
             return TextConstants.WORK_SUCCESS_MESSAGE_PREFIX + work.getName() + TextConstants.WORK_SUCCESS_MESSAGE_SUFFIX;
-        } else {
-            return TextConstants.INTERNAL_ERROR_MESSAGE;
         }
+        return TextConstants.INTERNAL_ERROR_MESSAGE;
+
     }
 
     @Override
     public String onStatRequest(AppType appType, long playerIdValue) {
         Player player = dataManager.getPlayer(appType, playerIdValue);
-        if (player != null) {
-            return String.format("Имя: %s\nОпыт: %d\nУровень: %d\nДеньги: %d",
-                    player.getName(), player.getExp(), player.getLevel(), player.getMoney());
-        } else {
-            return TextConstants.INTERNAL_ERROR_MESSAGE;
+        return String.format("Имя: %s, Опыт: %d, Уровень: %d, Деньги: %d",
+                player.getName(), player.getExp(), player.getLevel(), player.getMoney());
+    }
+
+    @Override
+    public String getAllFoodInfo() {
+        List<Food> foodList = dataManager.getAllFood();
+
+        StringBuilder sb = new StringBuilder();
+        sb.append(TextConstants.AVAILABLE_FOOD_HEADER).append("\n");
+        sb.append(TextConstants.SEPARATOR).append("\n");
+        for (Food food : foodList) {
+            sb.append(String.format(
+                    "%s - %s\n  %s %d\n%s\n",
+                    food.getName(), food.getDescription(),
+                    TextConstants.FOOD_DESCRIPTION_EXP, food.getExp(),
+                    TextConstants.SEPARATOR));
         }
+        return sb.toString();
     }
 
     @Override
-    public Food getFood(String name) {
-        return dataManager.getFood(name);
-    }
+    public String getAllWorkInfo() {
+        List<Work> workList = dataManager.getAllWork();
 
-    @Override
-    public Work getWork(String name) {
-        return dataManager.getWork(name);
-    }
-
-    @Override
-    public List<Food> getAllFood() {
-        return dataManager.getAllFood();
-    }
-
-    @Override
-    public List<Work> getAllWork() {
-        return dataManager.getAllWork();
+        StringBuilder sb = new StringBuilder();
+        sb.append(TextConstants.AVAILABLE_WORK_HEADER).append("\n");
+        sb.append(TextConstants.SEPARATOR).append("\n");
+        for (Work work : workList) {
+            sb.append(String.format(
+                    "%s - %s\n  %s %d\n  %s %d\n  Время: %d\n%s\n",
+                    work.getName(), work.getDescription(),
+                    TextConstants.WORK_DESCRIPTION_EXP, work.getExp(),
+                    TextConstants.WORK_DESCRIPTION_MONEY, work.getMoney(),
+                    work.getTime(),
+                    TextConstants.SEPARATOR));
+        }
+        return sb.toString();
     }
 }

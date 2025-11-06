@@ -18,6 +18,7 @@ compileTestJava {
 tasks.withType(JavaExec) {
     systemProperty "file.encoding", "UTF-8"
     jvmArgs += "--enable-native-access=ALL-UNNAMED"
+    jvmArgs += "-Dorg.slf4j.simplelogger.defaultLogLevel=OFF"
 }
 
 group = 'our.slonbot'
