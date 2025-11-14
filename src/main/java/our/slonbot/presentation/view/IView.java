@@ -1,6 +1,7 @@
 package our.slonbot.presentation.view;
 
 public interface IView {
+    void prepare(long chat_id);
     void showWelcome();
     void showHelp();
     void showStat(String statMessage);

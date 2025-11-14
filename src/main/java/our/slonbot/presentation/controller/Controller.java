@@ -2,29 +2,30 @@ package our.slonbot.presentation.controller;
 
 import our.slonbot.model.AppType;
 import our.slonbot.presentation.view.IView;
-import our.slonbot.reader.IReader;
 import our.slonbot.presentation.TextConstants;
 import our.slonbot.worker.IWorker;
+import org.telegram.telegrambots.longpolling.util.LongPollingSingleThreadUpdateConsumer;
+import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.generics.TelegramClient;
 
-public class Controller {
+public class Controller implements LongPollingSingleThreadUpdateConsumer {
 
     private final IView view;
-    private final IReader reader;
     private final IWorker worker;
-
-    public Controller(IReader reader, IView view, IWorker worker) {
+    public Controller(IView view, IWorker worker) {
         this.view = view;
-        this.reader = reader;
         this.worker = worker;
     }
 
-    public void start() {
-        view.showWelcome();
-        AppType appType = AppType.Console; // It will handler route
-        long playerId = 0; // It will handler route
-        while (true) {
-            var command = reader.readLine();
-            onCommand(playerId, appType, command);
+    @Override
+    public void consume(Update update) {
+        // We check if the update has a message and the message has text
+        if (update.hasMessage() && update.getMessage().hasText()) {
+            var user_id = update.getMessage().getFrom().getId();
+            var message_text = update.getMessage().getText();
+            var chat_id = update.getMessage().getChatId();
+            view.prepare(chat_id);
+            onCommand(user_id, AppType.Telegram, message_text);
         }
     }
 
